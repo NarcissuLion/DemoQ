@@ -16,6 +16,7 @@ function BattleStateUserInput.Create()
 end
 
 function BattleStateUserInput:OnEnter(actor)
+    assert(actor ~= nil, "Error! BattleStateUserInput.OnEnter -> actor is nil.")
     self.actor = actor
     self.skill = nil
     Notifier.AddListener("_Battle_UI_Click_Skip", self.OnSkipClicked, self)

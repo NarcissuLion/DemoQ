@@ -23,7 +23,8 @@ virtualCameraTarget = nil -- 探索世界虚拟相机跟随目标
 --------------------------------------
 
 -- 下面定义一些探险和战斗的通用计算方法，复杂函数放在这里也可以让OOP逻辑里更关注状态和结构，代码更简短清晰一些
---## 坐标转换 ------------------------
+
+--## 位置计算 ------------------------
 -- 战斗中地格坐标转换世界坐标，注意：这里coord永远是按最左边的格子作为size的起点
 function BattleCoord2WorldPos(coord, size)
     local worldX = SINGLE_GRID_WIDTH * (coord + 0.5) + BATTLE_WORLD_OFFSET_X
@@ -47,19 +48,21 @@ function BattleCameraFocusWorldXByCoord(coord)
     local scale = 0.1
     return -(BATTLE_FIELD_GRIDS * 0.5 - coord) * SINGLE_GRID_WIDTH * scale + BattleCenterWorldX()
 end
----------------------------------------
 
---## 战斗范围 -------------------------
 -- 获取角色当前站位的格子(大体型占多个)
 function GetActorStandingCoords(actor)
+    assert(actor ~= nil, 'Error! GetActorStandingCoords -> actor is nil.')
     local coords = {}
     for coord,actorInGrid in pairs(battleInst.grids) do
         if actor == actorInGrid then
             table.insert(coords, coord)
         end
     end
+    assert(#coords > 0, 'Error! actor\'s standing coords empty: '..actor.id..'[hp:'..actor.hp.."]")
     return coords
 end
+
+--## 技能施放逻辑 ----------------------------------------
 
 -- 获取当前角色所有可移动到的站位
 function GetAllPossibleStandCoords(actor)
@@ -72,7 +75,7 @@ function GetAllPossibleStandCoords(actor)
         if battleInst.grids[coord] ~= nil then break end -- 有人就停止
         local standCoords = {coord}  -- 产生一个站位
         for s=1,actor.context.cfgTbl.size-1 do
-            table.insert(coord+s, standCoords)   -- 向左找，所以体型坐标向右占
+            table.insert(standCoords, coord+s)   -- 向左找，所以体型坐标向右占
         end
         table.insert(allPossibleStands, standCoords)
     end
@@ -81,7 +84,7 @@ function GetAllPossibleStandCoords(actor)
         if battleInst.grids[coord] ~= nil then break end -- 有人就停止
         local standCoords = {coord}  -- 产生一个站位
         for s=1,actor.context.cfgTbl.size-1 do
-            table.insert(coord-s, 1, standCoords)   -- 向右找，所以体型坐标向左占
+            table.insert(standCoords, 1, coord-s)   -- 向右找，所以体型坐标向左占
         end
         table.insert(allPossibleStands, standCoords)
     end
@@ -90,6 +93,8 @@ end
 
 -- 获取当前角色施放技能的所有可行方案
 function GetAllPlansForCastSkill(caster, skill)
+    assert(caster ~= nil, "Error! GetAllPlansForCastSkill -> caster is nil.")
+    assert(skill ~= nil, "Error! GetAllPlansForCastSkill -> skill is nil.")
     local allPossibleStands = GetAllPossibleStandCoords(caster) -- 所有角色可能的站位，先把角色当前站位加进去
     local allPlans = {}
     local anyPlanHasTaunt = false
@@ -176,8 +181,9 @@ function FindNearbyActor(baseActor, coordOffset)
     local baseCoord = standCoords[1]
     return battleInst.grids[baseCoord + coordOffset]
 end
----------------------------------------
+---------------------------------------------------------
 
+--## 效果表现 --------------------------------------------
 -- 临时播特效用的
 function PlayEffect(resName, position, lastTime)
     local gameObject = GameObject.Instantiate(Resources.Load("Effects/"..resName), position, Quaternion.identity, WORLD_ROOT)
@@ -195,7 +201,9 @@ function DrawBezierCurve(resName, startPosition, endPosition)
     bezierRenderer:DrawQuadraticCurve(20, startPosition, ctrlPosition, endPosition)
     return gameObject
 end
+-----------------------------------------------------------
 
+--## 其他通用方法 ------------------------------------------
 -- 遍历判断条件
 function TestEverybodyInList(list, testfunc, tester, mode) -- mode 1全部满足, 2任意满足
     local result = mode == 1
@@ -215,4 +223,14 @@ function TestEverybodyInList(list, testfunc, tester, mode) -- mode 1全部满足
 end
 function CheckActorState_IDLE_or_DEAD(actor)
     return actor.fsm.currStateName == "IDLE" or actor.fsm.currStateName == "DEAD"
+end
+-----------------------------------------------------------
+
+--## debug方法 -------------------------------------
+function __Debug_DumpBattleGrids()
+    local message = ''
+    for coord,actorInGrid in pairs(battleInst.grids) do
+        message = message .. string.format("[%d:%s]", coord, actorInGrid ~= nil and tostring(actorInGrid.id) or 'nil')
+    end
+    print(message)
 end

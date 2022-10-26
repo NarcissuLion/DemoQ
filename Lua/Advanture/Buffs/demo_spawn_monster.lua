@@ -6,17 +6,17 @@ Buff.__index = Buff
 Buff.round = 99999
 
 function Buff:OnExitRound()
-    local standCoords = battleInst:GetActorStandingCoords(self.owner)
+    local standCoords = GetActorStandingCoords(self.owner)
     local maxCoord = standCoords[#standCoords]
     -- 向右找一个空格
     for coord=maxCoord+1,BATTLE_FIELD_GRIDS-1 do
         if battleInst.grids[coord] == nil then
-            local context = {}
-            context.coord = coord
-            context.cfgID = 202
-            context.camp = 2
-            context.class = 0
-            return Action.Create("simple_spawn_actor", context)
+            local actorContext = {}
+            actorContext.coord = coord
+            actorContext.cfgID = 202
+            actorContext.camp = 2
+            actorContext.class = 0
+            return Action.Create("simple_spawn_actor", self.owner, nil, nil, 0.25, actorContext)
         end
     end
     return nil

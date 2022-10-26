@@ -6,6 +6,8 @@ Event.__index = Event
 setmetatable(Event, EventBase)
 
 function Event:OnInit(skill, targets)
+    assert(skill ~= nil, self:DumpErrorFormat("skill invalidate."))
+    assert(targets ~= nil and #targets > 0, self:DumpErrorFormat("targets invalidate."))
     self.skill = skill
     self.targets = targets
 end

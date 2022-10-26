@@ -29,7 +29,7 @@ function Actor:Init(id, context)
     -- skills
     self.skills = {}
     for _,skillCfgID in ipairs(self.context.cfgTbl.skills) do
-        local skill = { cfgTbl=ConfigCenter.Find("skill", skillCfgID) }
+        local skill = { owner=self, cfgTbl=ConfigCenter.Find("skill", skillCfgID) }
         table.insert(self.skills, skill)
     end
 

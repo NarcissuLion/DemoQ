@@ -18,6 +18,9 @@ function BattleStateDoActor:OnExit()
 end
 
 function BattleStateDoActor:OnEnter(actor, skill, targets, newCoord)
+    assert(actor ~= nil, "Error! BattleStateDoActor.OnEnter -> actor is nil.")
+    assert(skill ~= nil, "Error! BattleStateDoActor.OnEnter -> skill is nil.")
+    assert(targets ~= nil and #targets > 0, "Error! BattleStateDoActor.OnEnter -> targets is nil or empty.")
     self.actor = actor
     local action = Action.Create(skill.cfgTbl.castAction, actor, skill, targets)
     if newCoord ~= nil then

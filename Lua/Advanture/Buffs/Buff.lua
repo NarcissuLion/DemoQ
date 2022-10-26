@@ -7,14 +7,14 @@ Buff.icon = nil             -- buff图标，nil不显示图标
 Buff.priority = 0           -- buff执行优先级
 Buff.round = 0              -- 持续回合数
 
-function Buff.Create(buffName, owner)
+function Buff.Create(buffName, owner, belongSkill)
     local BUFF = require('Advanture.Buffs.'..buffName)
     assert(BUFF ~= nil, 'Error! buff not exists: '..buffName)
     setmetatable(BUFF, Buff)
 
     local copy = {}
     setmetatable(copy, BUFF)
-    copy:Init(owner)
+    copy:Init(owner, belongSkill)
     return copy
 end
 
@@ -24,10 +24,12 @@ function Buff:Init(owner)
 end
 function Buff:Dispose()
     self.owner = nil
+    self.belongSkill = nil
     if self.OnDispose ~= nil then self:OnDispose() end
 end
 function Buff:Add(owner)
     self.owner = owner
+    self.belongSkill = belongSkill
     self.owner:AddBuff(self)
     if self.OnAdd ~= nil then self:OnAdd() end
 end

@@ -6,6 +6,7 @@ Event.__index = Event
 setmetatable(Event, EventBase)
 
 function Event:OnInit(actorContext)
+    assert(actorContext ~= nil, self:DumpErrorFormat("actorContext invalidate."))
     self.actorContext = actorContext
 end
 
@@ -18,6 +19,10 @@ function Event:OnEnter()
     for i=0,actor.context.cfgTbl.size-1 do
         battleInst.grids[self.actorContext.coord + i] = actor
     end
+    for _,skill in ipairs(actor.skills) do
+        skill.cd = skill.cfgTbl.startCD+1
+    end
+    actor:SetPosition(BattleCoord2WorldPos(self.actorContext.coord, actor.context.cfgTbl.size))
 end
 
 return Event

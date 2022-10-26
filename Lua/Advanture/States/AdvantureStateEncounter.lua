@@ -39,8 +39,7 @@ function AdvantureStateEncounter:PrepareEvent_Battle(wave)
     for id,actor in pairs(advantureInst.actors) do
         local coord = actor.context.coord
         actor:SetSortOrder(coord) -- 进战斗前根据从左到右排下显示层次
-        battleContext.grids[coord] = id
-        for i=2,actor.context.cfgTbl.size do -- 大体型怪物占多格
+        for i=0,actor.context.cfgTbl.size-1 do -- 大体型怪物占多格
             battleContext.grids[coord+i] = id
         end
         local worldPos = BattleCoord2WorldPos(coord, actor.context.cfgTbl.size)

@@ -32,17 +32,17 @@ local context = {
             posx = 5,
             type = 'Battle', -- 战斗
             enemies = {
-                {coord=5, cfgID=202, camp=2, class=0},
-                {coord=6, cfgID=202, camp=2, class=0},
-                {coord=7, cfgID=202, camp=2, class=0},
-                {coord=8, cfgID=202, camp=2, class=0},
+                {coord=5, cfgID=201, camp=2, class=0},
             },
         },
         {
             posx = 25,
             type = 'Battle', -- 战斗
             enemies = {
-                {coord=5, cfgID=201, camp=2, class=0},
+                {coord=5, cfgID=202, camp=2, class=0},
+                {coord=6, cfgID=202, camp=2, class=0},
+                {coord=7, cfgID=202, camp=2, class=0},
+                {coord=8, cfgID=202, camp=2, class=0},
             },
         },
         {

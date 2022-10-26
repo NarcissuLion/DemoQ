@@ -10,11 +10,12 @@ function Action.Create(actionName, caster, skill, targets, ...)
 
     local copy = {}
     setmetatable(copy, ACTION)
-    copy:Init(caster, skill, targets, ...)
+    copy:Init(actionName, caster, skill, targets, ...)
     return copy
 end
 
-function Action:Init(caster, skill, targets, ...)
+function Action:Init(name, caster, skill, targets, ...)
+    self.name = name
     self.caster = caster
     self.skill = skill
     self.targets = targets
@@ -26,6 +27,7 @@ function Action:Init(caster, skill, targets, ...)
 end
 
 function Action:Dispose()
+    self.name = nil
     self.caster = nil
     self.skill = nil
     self.targets = nil
@@ -44,7 +46,7 @@ function Action:AddEvent(time, eventName, ...)
 
     local event = {}
     setmetatable(event, EVENT)
-    event:Init(self.caster, ...);
+    event:Init(eventName, self, time, self.caster, ...);
     self.events[event] = time
     self.eventsCount = self.eventsCount + 1
 end
