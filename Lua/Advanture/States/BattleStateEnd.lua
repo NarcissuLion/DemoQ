@@ -22,6 +22,7 @@ function BattleStateEnd:OnEnter(win)
                 table.remove(advanture.actors, i)
             else
                 -- todo 我方死了的角色复活 ??
+                actor.renderer:SetHpBarVisible(false)
             end
         end
         advanture.fsm:Switch("LINEUP")

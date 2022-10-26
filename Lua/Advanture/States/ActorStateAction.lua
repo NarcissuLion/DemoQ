@@ -18,6 +18,8 @@ end
 
 function ActorStateAction:OnUpdate(deltaTime)
     self.action:Update(deltaTime)
+    if self.action == nil then return end -- action逻辑可能导致该角色状态转移，所以这里要判断一下
+
     if self.action.done then
         self.owner.fsm:Switch("IDLE")
     end

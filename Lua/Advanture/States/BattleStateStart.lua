@@ -22,6 +22,8 @@ function BattleStateStart:OnEnter()
         for _,skill in ipairs(actor.skills) do
             skill.cd = skill.cfgTbl.startCD+1
         end
+        actor.renderer:SetHpBarVisible(true)
+        actor.renderer:SyncHpBar(actor.hp / actor.context.cfgTbl.maxHP)
     end
 
     self.loopActorIdx = 1

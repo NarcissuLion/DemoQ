@@ -1,3 +1,5 @@
+_ENV = _G._ENV_ADVANTURE
+
 local ActorRenderer = {}
 ActorRenderer.__index = ActorRenderer
 
@@ -17,6 +19,12 @@ function ActorRenderer:Init(id, prefab)
     self.spriteRenderer = self.gameObject:GetComponentInChildren(typeof(SpriteRenderer))
     self.spriteRenderer.flipX = false
     self.eventTrigger = self.gameObject:GetComponentInChildren(typeof(CS.SpriteRendererEventTrigger))
+    self.hpBar = {}
+    self.hpBar.go = GameObject.Instantiate(Resources.Load("UI/hpBar"), WORLD_CANVAS)
+    self.hpBar.front = self.hpBar.go.transform:Find("front")
+    self.hpBar.middle = self.hpBar.go.transform:Find("middle")
+    self.hpBar.go.name = "hpBar_"..id
+    self.hpBar.go:SetActive(false)
 end
 
 function ActorRenderer:Dispose()
@@ -31,6 +39,7 @@ end
 
 function ActorRenderer:SetPosition(position)
     self.transform.localPosition = position
+    self.hpBar.go.transform.localPosition = position + Vector3(0, -0.25, 0)
 end
 
 -- 规范所有角色资源默认超右
@@ -59,6 +68,21 @@ function ActorRenderer:Clone()
     clone.transform = clone.gameObject.transform
     clone.spriteRenderer = clone.gameObject:GetComponentInChildren(typeof(SpriteRenderer))
     clone.spriteRenderer.flipX = false
+end
+
+function ActorRenderer:SetHpBarVisible(visible)
+    self.hpBar.go:SetActive(visible)
+end
+
+function ActorRenderer:SyncHpBar(hpPercent)
+    if self.hpBar.tween ~= nil then DOTween.Kill(self.hpBar.tween) end
+    if hpPercent < self.hpBar.front.localScale.x then
+        self.hpBar.front.localScale = Vector3(hpPercent, 1, 1)
+        self.hpBar.tween = self.hpBar.middle:DOScale(Vector3(hpPercent, 1, 1), 0.25)
+    else
+        self.hpBar.middle.localScale = Vector3(hpPercent, 1, 1)
+        self.hpBar.tween = self.hpBar.front:DOScale(Vector3(hpPercent, 1, 1), 0.25)
+    end
 end
 
 return ActorRenderer

@@ -59,3 +59,6 @@ TagManager:
   - name: ParallaxFront
     uniqueID: 2903463343
     locked: 0
+  - name: ParallaxUI
+    uniqueID: 612345443
+    locked: 0

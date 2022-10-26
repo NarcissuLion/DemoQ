@@ -13,6 +13,7 @@ SINGLE_GRID_WIDTH = BATTLE_FIELD_WIDTH / BATTLE_FIELD_GRIDS  -- 单格宽度
 
 -- 探索中需要赋值的全局状态
 WORLD_ROOT = nil  -- todo 先扔这，可能有问题
+WORLD_CANVAS = nil -- 世界UICanvase
 BATTLE_WORLD_OFFSET_X = 0 -- 当前战斗区域基于探险世界的x轴偏移，探险中会赋值
 
 --## 探索环境下的单例 -----------------
@@ -95,7 +96,7 @@ end
 function GetAllPlansForCastSkill(caster, skill)
     assert(caster ~= nil, "Error! GetAllPlansForCastSkill -> caster is nil.")
     assert(skill ~= nil, "Error! GetAllPlansForCastSkill -> skill is nil.")
-    local allPossibleStands = GetAllPossibleStandCoords(caster) -- 所有角色可能的站位，先把角色当前站位加进去
+    local allPossibleStands = GetAllPossibleStandCoords(caster) -- 所有角色可能的站位
     local allPlans = {}
     local anyPlanHasTaunt = false
     for i,standCoords in ipairs(allPossibleStands) do  -- 为每个可能站位分析目标
@@ -107,11 +108,12 @@ function GetAllPlansForCastSkill(caster, skill)
         local minCoord = standCoords[1]
         local maxCoord = standCoords[#standCoords]
         -- 往前探，从最左边+最小范围开始，到最左边+最大范围结束
+        local targetAlreadyInThisPlan = {}
         local coordFrom = math.max(0, minCoord - skill.cfgTbl.rangeMin)
         local coordTo = math.max(0, minCoord - skill.cfgTbl.rangeMax)
         for coord=coordFrom,coordTo,-1 do
             local target = battleInst.grids[coord]
-            if target ~= nil then  -- 格子有人
+            if target ~= nil and targetAlreadyInThisPlan[target] == nil then  -- 格子有人
                 if not plan.hasTaunt or skill.cfgTbl.isAOE or target:CheckSpState("taunt") then -- 如果计划中已经包含嘲讽目标，而且不是AOE技能，则不用再可考非嘲讽目标
                     local dist = minCoord - coord
                     if dist >= skill.cfgTbl.rangeMin and dist <= skill.cfgTbl.rangeMax then -- 目标距离在技能范围内
@@ -125,6 +127,7 @@ function GetAllPlansForCastSkill(caster, skill)
                             end
                             -- print(i.."-LEFT:"..target.id)
                             table.insert(plan.targets, target)
+                            targetAlreadyInThisPlan[target] = true
                         end
                     end
                 end
@@ -135,7 +138,7 @@ function GetAllPlansForCastSkill(caster, skill)
         local coordTo = math.min(BATTLE_FIELD_GRIDS-1, maxCoord + skill.cfgTbl.rangeMax)
         for coord=maxCoord+skill.cfgTbl.rangeMin,BATTLE_FIELD_GRIDS-1 do
             local target = battleInst.grids[coord]
-            if target ~= nil then  -- 格子有人
+            if target ~= nil and targetAlreadyInThisPlan[target] == nil  then  -- 格子有人
                 if not plan.hasTaunt or skill.cfgTbl.isAOE or target:CheckSpState("taunt") then -- 如果计划中已经包含嘲讽目标，而且不是AOE技能，则不用再可考非嘲讽目标
                     local dist = coord - maxCoord
                     if dist >= skill.cfgTbl.rangeMin and dist <= skill.cfgTbl.rangeMax then -- 目标距离在技能范围内
@@ -149,6 +152,7 @@ function GetAllPlansForCastSkill(caster, skill)
                             end
                             -- print(i.."-LEFT:"..target.id)
                             table.insert(plan.targets, target)
+                            targetAlreadyInThisPlan[target] = true
                         end
                     end
                 end
@@ -192,6 +196,14 @@ function PlayEffect(resName, position, lastTime)
         if autoDestroy == nil then autoDestroy = gameObject:AddComponent(typeof(CS.AutoDestroy)) end
         autoDestroy.delay = lastTime
     end
+    return gameObject
+end
+function PlayFloatText(text, color, position)
+    local gameObject = GameObject.Instantiate(Resources.Load("UI/floattext"), position, Quaternion.identity, WORLD_CANVAS)
+    local textMesh = gameObject:GetComponent("TMP_Text")
+    textMesh.text = text
+    textMesh.color = color
+    gameObject.transform:DOMove(position + Vector3(0, 1, 0), 0.75)
     return gameObject
 end
 function DrawBezierCurve(resName, startPosition, endPosition)

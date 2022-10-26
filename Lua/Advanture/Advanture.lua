@@ -18,6 +18,14 @@ end
 function Advanture:Init(context)
     self.context = context
 
+    -- 全局常量初始化
+    WORLD_ROOT = GameObject.Find("World").transform
+    WORLD_CANVAS = GameObject.Find("World/Canvas").transform
+    BATTLE_WORLD_OFFSET_X = 0
+    -- 虚拟相机
+    virtualCamera = GameObject.Find("World/VCamera"):GetComponent("CinemachineVirtualCamera")
+    virtualCameraTarget = GameObject.Find("World/VCameraTarget").transform
+
     self.actors = {}   -- 全体角色，包括敌我
     -- 创建角色实例
     for _, heroContext in ipairs(context.heros) do
@@ -29,14 +37,6 @@ function Advanture:Init(context)
         self:CreateWave(i, waveContext)
     end
     self.currWaveSeq = 1
-    
-    -- 虚拟相机
-    virtualCamera = GameObject.Find("World/VCamera"):GetComponent("CinemachineVirtualCamera")
-    virtualCameraTarget = GameObject.Find("World/VCameraTarget").transform
-
-    -- 全局常量初始化
-    WORLD_ROOT = GameObject.Find("World").transform
-    BATTLE_WORLD_OFFSET_X = 0
 
     -- 探险状态机
     self.fsm = require('Framework.FSMachine').Create(self)
@@ -70,9 +70,18 @@ end
 
 function Advanture:CreateActor(context)
     local actor = require('Advanture.Actor').Create(__AUTO_INC_ID, context)
-    self.actors[actor.id] = actor
+    table.insert(self.actors, actor)
     __AUTO_INC_ID = __AUTO_INC_ID + 1
     return actor
+end
+
+function Advanture:FindActor(actorID)
+    for _,actor in ipairs(self.actors) do
+        if actor.id == actorID then
+            return actor
+        end
+    end
+    return nil
 end
 
 function Advanture:CreateWave(idx, context)

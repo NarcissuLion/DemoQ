@@ -13,16 +13,17 @@ MonoBehaviour:
   m_Name: AssetReferenceDB
   m_EditorClassIdentifier: 
   m_assets:
-  - m_assetDatabaseId: 82671f91f39db914eb241c14754b8d47
-    m_importFrom: Assets/Demo/Resources/Effects/ef_redline.prefab
+  - m_assetDatabaseId: 20bbc23f42563a54b92e11259827711c
+    m_importFrom: Assets/Demo/Resources/UI/hpBar.prefab
     m_exportTo: 
     m_variantName: 
   - m_assetDatabaseId: a57c30f7663a4c748a4b286a771812d4
     m_importFrom: Assets/AssetGraph/AssetBundles/Cache/TemporalSettingFiles/AssetReferenceDB.asset
     m_exportTo: 
     m_variantName: 
-  - m_assetDatabaseId: b401ef029abdc7245958dc671789be50
-    m_importFrom: Assets/Demo/Resources/UI/UI_Battle.prefab
+  - m_assetDatabaseId: 8f586378b4e144a9851e7b34d9b748ee
+    m_importFrom: Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans
+      SDF.asset
     m_exportTo: 
     m_variantName: 
   m_version: 2

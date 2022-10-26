@@ -10,8 +10,8 @@ function Action:InitEvents()
     local nearbyActors = {}
     local targetLeft = FindNearbyActor(target, -1)
     local targetRight = FindNearbyActor(target, 1)
-    if targetLeft ~= nil then table.insert(nearbyActors, targetLeft) end
-    if targetRight ~= nil then table.insert(nearbyActors, targetRight) end
+    if targetLeft ~= nil and targetLeft.context.camp == target.context.camp then table.insert(nearbyActors, targetLeft) end
+    if targetRight ~= nil and targetRight.context.camp == target.context.camp then table.insert(nearbyActors, targetRight) end
 
     self:AddEvent(0.25, "EventDoDamage", self.skill, self.targets)
     if #nearbyActors > 0 then

@@ -36,11 +36,11 @@ function AdvantureStateEncounter:PrepareEvent_Battle(wave)
         advantureInst:CreateActor(enemy_c)
     end
     -- 将所有角色注册进battleContext中
-    for id,actor in pairs(advantureInst.actors) do
+    for _,actor in ipairs(advantureInst.actors) do
         local coord = actor.context.coord
         actor:SetSortOrder(coord) -- 进战斗前根据从左到右排下显示层次
         for i=0,actor.context.cfgTbl.size-1 do -- 大体型怪物占多格
-            battleContext.grids[coord+i] = id
+            battleContext.grids[coord+i] = actor.id
         end
         local worldPos = BattleCoord2WorldPos(coord, actor.context.cfgTbl.size)
         if actor.context.camp == 1 then

@@ -19,7 +19,7 @@ function Battle:Init(context, advanture)
 
     self.grids = {}  -- 战斗实例中的grids里存放actor实例，方便查找
     for coord,actorID in pairs(self.context.grids) do
-        self.grids[coord] = advanture.actors[actorID]
+        self.grids[coord] = advanture:FindActor(actorID)
     end
 
     -- 一些战斗中的状态 -----------------------------

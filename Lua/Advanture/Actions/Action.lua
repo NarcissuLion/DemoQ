@@ -27,10 +27,14 @@ function Action:Init(name, caster, skill, targets, ...)
 end
 
 function Action:Dispose()
+    self.done = true -- 调用Dispose视为强制中断action
     self.name = nil
     self.caster = nil
     self.skill = nil
     self.targets = nil
+    for event,_ in pairs(self.events) do
+        event:Dispose()
+    end
     self.events = nil
     self.eventsCount = 0
 end
@@ -58,13 +62,14 @@ function Action:Update(deltaTime)
         if event.state == 0 then
             if self.timer >= time then
                 event:Enter()
+                if self.done then return end  -- 事件逻辑有可能导致action被中断，所以这里要判断一下
             end
         end
         if event.state == 1 then
             event:Update(deltaTime)
+            if self.done then return end  -- 同上
         end
         if event.state == 2 then
-            event:Dispose()
             self.events[event] = nil
             self.eventsCount = self.eventsCount - 1
         end

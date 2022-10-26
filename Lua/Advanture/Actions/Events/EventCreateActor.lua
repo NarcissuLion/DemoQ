@@ -23,6 +23,8 @@ function Event:OnEnter()
         skill.cd = skill.cfgTbl.startCD+1
     end
     actor:SetPosition(BattleCoord2WorldPos(self.actorContext.coord, actor.context.cfgTbl.size))
+    actor.renderer:SetHpBarVisible(true)
+    actor.renderer:SyncHpBar(actor.hp / actor.context.cfgTbl.maxHP)
 end
 
 return Event

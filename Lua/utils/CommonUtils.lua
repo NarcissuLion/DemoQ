@@ -8,4 +8,8 @@ function CommonUtils.CompareTwoLists(listA, listB)
     return true
 end
 
+function CommonUtils.SafeMultiply(a, b, protection)
+    return math.floor(a * b + (protection ~= nil and protection or 0.000001))
+end
+
 return CommonUtils

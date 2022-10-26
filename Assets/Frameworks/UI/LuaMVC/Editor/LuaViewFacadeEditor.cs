@@ -71,7 +71,7 @@ namespace Framework.LuaMVC.Editor
             "Image",
             "RawImage",
             "Text",
-            "TextMeshProUGUI",
+            "TMP_Text",
             "InputField",
             "TMP_InputField",
             "Toggle",
@@ -138,7 +138,7 @@ namespace Framework.LuaMVC.Editor
             // switch (typeProperty.stringValue)
             // {
             //     case "Text":
-            //     case "TextMeshProUGUI":
+            //     case "TMP_Text":
             //         fieldRect.y += 20f;
             //         EditorGUI.LabelField(new Rect(fieldRect.x, fieldRect.y + 1, 60f, 18f), "LangTbl");
             //         EditorGUI.PropertyField(new Rect(fieldRect.x + 60, fieldRect.y + 1, fieldRect.width * 0.5f - 60f, 18f), paramStrProperty, new GUIContent(""));

@@ -28,10 +28,14 @@ function ActorStateHit:OnEnter(hit)
     local hurt = hit.value < 0
     local heal = hit.value > 0
     self.owner.hp = math.max(0, self.owner.hp + hit.value)
+    self.owner.hp = math.min(self.owner.hp, self.owner.context.cfgTbl.maxHP)
+    self.owner.renderer:SyncHpBar(self.owner.hp / self.owner.context.cfgTbl.maxHP)
 
     -- 播放hit特效
     if hit.effect ~= nil then
     end
+    -- 播放飘字
+    PlayFloatText(tostring(hit.value), hurt and Color.red or Color.green, self.owner:GetPosition() + Vector3(0, 1.5, 0))
 
     if hurt then
         -- 可以通知飘字什么的

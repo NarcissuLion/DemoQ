@@ -22,7 +22,7 @@ end
 function BattleStateActorAI:OnEnter(actor)
     assert(actor ~= nil, "Error! BattleStateActorAI.OnEnter -> actor is nil.")
     self.actor = actor
-    PlayEffect("ef_thinking", actor:GetPosition() + Vector3(0, 2.5, 0), 0.5)
+    -- PlayEffect("ef_thinking", actor:GetPosition() + Vector3(0, 2.5, 0), 0.5)
     require('Framework.Timer').Create(0.5, 1, self.MakeDecision, self):Play() -- 假装思考1秒中
 end
 
@@ -44,7 +44,6 @@ function BattleStateActorAI:MakeDecision()
 
     if #sortedSkills > 0 then
         for i,skill in ipairs(sortedSkills) do
-            if self.actor == nil then print("WTFF") end
             local allPlans = GetAllPlansForCastSkill(self.actor, skill)  -- 获取该技能施放计划书和目标查找表
             if #allPlans > 0 then  -- 如果当前技能没有可用计划书，就跳过到下一个技能
                 local plan = allPlans[1] -- 这里涉及AI策略，暂时先只选第一个方案书
