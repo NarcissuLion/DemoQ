@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee4bc21567f434b598a3c96ba4946372, type: 3}
+  m_Name: AssetReferenceDB
+  m_EditorClassIdentifier: 
+  m_assets:
+  - m_assetDatabaseId: dafe4c82ebed44b81bb48ef142b5386a
+    m_importFrom: Assets/AssetGraph/Editor/System/Model/V2/Settings.cs
+    m_exportTo: 
+    m_variantName: 
+  - m_assetDatabaseId: 981e89e77e3138644a8e515d6bca66d3
+    m_importFrom: Assets/AssetGraph/AssetBundles/Cache/TemporalSettingFiles/AssetReferenceDB.asset
+    m_exportTo: 
+    m_variantName: 
+  - m_assetDatabaseId: 1f9e3b71e6d8dcb41b37e9a187c83d60
+    m_importFrom: Assets/Resources/DOTweenSettings.asset
+    m_exportTo: 
+    m_variantName: 
+  - m_assetDatabaseId: 89ea1d9c6fb730149afae1b6bd22e2b5
+    m_importFrom: Assets/AssetGraph/Asset Graph.asset
+    m_exportTo: 
+    m_variantName: 
+  - m_assetDatabaseId: fde446adfbec931408bd22c21569b4ad
+    m_importFrom: Assets/Scenes/TestLua.unity
+    m_exportTo: 
+    m_variantName: 
+  - m_assetDatabaseId: d43276ed587e7f647890bb174405e993
+    m_importFrom: Assets/TestLua.cs
+    m_exportTo: 
+    m_variantName: 
+  m_version: 2

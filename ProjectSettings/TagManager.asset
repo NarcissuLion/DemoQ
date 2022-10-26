@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - World
+  - 
+  - PostProcessing
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: ParallaxSky
+    uniqueID: 2356914395
+    locked: 0
+  - name: ParallaxGround
+    uniqueID: 1228182283
+    locked: 0
+  - name: ParallaxBack
+    uniqueID: 1997712785
+    locked: 0
+  - name: ParallaxObject
+    uniqueID: 3688990751
+    locked: 0
+  - name: ParallaxEffect
+    uniqueID: 3103984983
+    locked: 0
+  - name: ParallaxFront
+    uniqueID: 2903463343
+    locked: 0
