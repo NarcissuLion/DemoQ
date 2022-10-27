@@ -7,6 +7,7 @@ Actors[101] = { -- 主角
     size=1,
     skills={10101},
     prefab='Player1',
+    icon='7',
 }
 Actors[102] = { -- 弓手
     id=102,
@@ -15,6 +16,7 @@ Actors[102] = { -- 弓手
     size=1,
     skills={10201,10202},
     prefab='Hero3',
+    icon='5',
 }
 Actors[103] = { -- 法师
     id=103,
@@ -23,6 +25,7 @@ Actors[103] = { -- 法师
     size=1,
     skills={10301,10302},
     prefab='Hero2',
+    icon='4',
 }
 Actors[104] = { -- 牧师
     id=104,
@@ -31,6 +34,7 @@ Actors[104] = { -- 牧师
     size=1,
     skills={10401,10402},
     prefab='Hero4',
+    icon='6',
 }
 Actors[105] = { -- 战士
     id=105,
@@ -39,6 +43,7 @@ Actors[105] = { -- 战士
     size=1,
     skills={10501,10502},
     prefab='Hero1',
+    icon='3',
 }
 Actors[201] = { -- Boss
     id=201,
@@ -47,6 +52,7 @@ Actors[201] = { -- Boss
     size=2,
     skills={20101,20102},
     prefab='Boss1',
+    icon='1',
 }
 Actors[202] = { -- 小怪
     id=202,
@@ -55,6 +61,7 @@ Actors[202] = { -- 小怪
     size=1,
     skills={20201},
     prefab='Monster1',
+    icon='2',
 }
 
 return Actors

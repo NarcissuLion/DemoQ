@@ -1,5 +1,7 @@
 _ENV = _G._ENV_ADVANTURE
 
+local Notifier = require('Framework.Notifier')
+
 -- 战斗执行回合
 local BattleStateDoRound = {}
 local FSMachine = require 'Framework.FSMachine'
@@ -22,6 +24,10 @@ function BattleStateDoRound:OnEnter()
             break
         end
     end
+
+    -- 刷新行动顺序条
+    Notifier.Dispatch("_Battle_Action_Sort", battleInst.sortedActionActors , battleInst.currActionActorIdx)
+
     if actor == nil then -- 全动完了
         battleInst.fsm:Switch("EXITROUND")
     else

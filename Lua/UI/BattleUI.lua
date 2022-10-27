@@ -14,6 +14,7 @@ function BattleUI:Init()
     self.rootGO = GameObject.Instantiate(Resources.Load("UI/UI_Battle"), GameObject.Find("UI/Canvas2D").transform)
     self.txt_round = self.rootGO.transform:Find("txt_round"):GetComponent("Text")
     self.obj_bottom = self.rootGO.transform:Find("panel_bottom").gameObject
+    self.obj_action_sort = self.rootGO.transform:Find("action_sort").gameObject
     self.list_skill = {}
     for i=1,4 do
         local item_skill = {}
@@ -35,6 +36,7 @@ function BattleUI:Init()
     Notifier.AddListener("_Battle_Actor_Input", self.ShowActorSkills, self)
     Notifier.AddListener("_Battle_Skill_Selected", self.ShowChosenSkillAffects, self)
     Notifier.AddListener("_Battle_Actor_Input_Done", self.HideActorSkills, self)
+    Notifier.AddListener("_Battle_Action_Sort", self.RefreshActionSort, self)
 end
 
 function BattleUI:Dispose()
@@ -44,6 +46,7 @@ function BattleUI:Dispose()
     Notifier.RemoveListener("_Battle_Actor_Input", self.ShowActorSkills, self)
     Notifier.RemoveListener("_Battle_Skill_Selected", self.ShowChosenSkillAffects, self)
     Notifier.RemoveListener("_Battle_Actor_Input_Done", self.HideActorSkills, self)
+    Notifier.RemoveListener("_Battle_Action_Sort", self.RefreshActionSort, self)
 
     if self.rootGO == nil then return end
     GameObject.Destroy(self.rootGO)
@@ -93,6 +96,27 @@ function BattleUI:ShowChosenSkillAffects(skillIdx)
     for i=1,4 do
         local item_skill = self.list_skill[i]
         item_skill.obj_selected:SetActive(i == skillIdx)
+    end
+end
+
+function BattleUI:RefreshActionSort(sortedActionActors , Idx)
+    for i = 1, 5 do
+        local node = self.obj_action_sort.transform:Find(i)
+        node.gameObject:SetActive(false)
+    end
+
+    local index = 1
+    for i, actor in ipairs(sortedActionActors) do
+        local node = self.obj_action_sort.transform:Find(index)
+        local show = i >= Idx and actor.hp > 0
+        if show then
+            node.gameObject:SetActive(true)
+            node:Find("enemy").gameObject:SetActive(actor.context.camp == 2)
+            node:Find("own").gameObject:SetActive(actor.context.camp == 1)
+            node:Find("icon"):GetComponent("Image").sprite  = Resources.Load("Sprites/SpriteAssets/Icon/" .. actor.context.cfgTbl.icon, typeof(Sprite))
+            index = index + 1
+        end
+        if index > 5 then break end
     end
 end
 
