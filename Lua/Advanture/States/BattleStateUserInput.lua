@@ -50,6 +50,11 @@ function BattleStateUserInput:ReleaseAllEffects()
         end
     end
     self.lines = nil
+    if self.marks ~= nil then
+        for _,mark in ipairs(self.marks) do
+            GameObject.Destroy(mark)
+        end
+    end
 end
 
 -- UI点击跳过回合
@@ -73,6 +78,7 @@ function BattleStateUserInput:OnSkillClicked(skillIdx)
     -- 根据计划书画虚影和目标线
     self.shades = {}
     self.lines = {}
+    self.marks = {}
     for _,plan in ipairs(self.allPlans) do
         local casterPosition = nil
         if plan.needMove then  -- 需要移动的计划创建虚影
@@ -83,12 +89,15 @@ function BattleStateUserInput:OnSkillClicked(skillIdx)
         else 
             casterPosition = self.actor.position + Vector3(0, 2, 0)
         end
-        -- 逐个目标连线
+        -- 目标连线和脚底标记
         for _,target in ipairs(plan.targets) do
             local targetPosition = target.position + Vector3(0, 2, 0)
             local lineRes = target.context.camp == self.actor.context.camp and "ef_greenline" or "ef_redline"
             local line = DrawBezierCurve(lineRes, casterPosition, targetPosition)
             table.insert(self.lines, line)
+            
+            local mark = DrawTargetMark(target, self.skill)
+            table.insert(self.marks, mark)
         end
     end
 end

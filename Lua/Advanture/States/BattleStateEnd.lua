@@ -1,5 +1,7 @@
 _ENV = _G._ENV_ADVANTURE
 
+local Notifier = require 'Framework.Notifier'
+
 -- 战斗结束状态
 local BattleStateEnd = {}
 local FSMachine = require 'Framework.FSMachine'
@@ -14,6 +16,7 @@ function BattleStateEnd.Create()
 end
 
 function BattleStateEnd:OnEnter(win)
+    Notifier.Dispatch("_Battle_End")
     local advanture = battleInst.advanture
     if win then -- 回到探险
         for i=#advanture.actors,1,-1 do
@@ -22,6 +25,7 @@ function BattleStateEnd:OnEnter(win)
                 table.remove(advanture.actors, i)
             else
                 -- todo 我方死了的角色复活 ??
+                actor:ClearAllBuffs()
                 actor.renderer:SetHpBarVisible(false)
             end
         end

@@ -48,6 +48,75 @@ namespace Framework.FileSys
 			}
 		}
 
+        public static byte[] ReadAllBytes(string path, out string error, bool tryBackups = true)
+        {
+            error = string.Empty;
+            byte[] allBytes = null;
+            string origPath = path;
+            int backupIdx = 0;
+            if (NeedWebRequest(path))
+            {
+                int tryTimes = 0;
+                bool requestDone = false;
+                while (!requestDone)
+                {
+                    ++tryTimes;
+                    using (UnityWebRequest request = UnityWebRequest.Get(path))
+                    {
+                        request.timeout = FileSystem.DEFAULT_REQUEST_TIME_OUT;
+                        UnityWebRequestAsyncOperation asyncOp = request.SendWebRequest();
+                        while (!asyncOp.isDone) {}
+                        if (!string.IsNullOrEmpty(request.error))
+                        {
+                            if (tryTimes > FileSystem.REQUEST_MAX_RETRY_TIMES)
+                            {
+                                if (tryBackups)     //尝试备用url
+                                {
+                                    string backupUrl = FileSystem.GetRemoteBackupUrl(origPath, ref backupIdx);
+                                    if (string.IsNullOrEmpty(backupUrl))    //未命中备用url
+                                    {
+                                        error = request.error;
+                                        requestDone = true;
+                                    }
+                                    else
+                                    {
+                                        path = backupUrl;
+                                        tryTimes = 0;
+                                    }
+                                }
+                                else
+                                {
+                                    error = request.error;
+                                    requestDone = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            allBytes = request.downloadHandler.data;
+                            requestDone = true;
+                        }
+                    }
+                }
+                // UnityEngine.Debug.Log("ReadAllText(Web) -> " + path + " : " + error);
+                return allBytes;
+            }
+            else if (IsAssetRequest(path))
+            {
+                try { allBytes = Resources.Load<TextAsset>(path.Substring(5)).bytes; }
+                catch (System.Exception e) { error = e.Message; }
+                // UnityEngine.Debug.Log("ReadAllText(File) -> " + path + " : " + error);
+                return allBytes;
+            }
+            else
+            {
+                try { allBytes = File.ReadAllBytes(path); }
+                catch (System.Exception e) { error = e.Message; }
+                // UnityEngine.Debug.Log("ReadAllText(File) -> " + path + " : " + error);
+                return allBytes;
+            }
+        }
+
         public static string ReadAllText(string path, out string error, bool tryBackups = true)
         {
             error = string.Empty;

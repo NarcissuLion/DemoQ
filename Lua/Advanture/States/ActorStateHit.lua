@@ -35,7 +35,7 @@ function ActorStateHit:OnEnter(hit)
     if hit.effect ~= nil then
     end
     -- 播放飘字
-    PlayFloatText(tostring(hit.value), hurt and Color.red or Color.green, self.owner:GetPosition() + Vector3(0, 1.5, 0))
+    PlayFloatText(hurt and hit.value or ('+'..hit.value), hurt and Color.red or Color.green, self.owner:GetPosition() + Vector3(0, 1.5, 0))
 
     if hurt then
         -- 可以通知飘字什么的

@@ -13,6 +13,7 @@ function ActorStateDying.Create()
 end
 
 function ActorStateDying:OnEnter()
+    self.owner:ClearAllBuffs()
     self.owner.renderer:SetHpBarVisible(false)
     self.owner.renderer.spriteRenderer:DOColor(Color(1, 1, 1, 0), 0.5):OnComplete(function()
         self.owner.fsm:Switch("DEAD")

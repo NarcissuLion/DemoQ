@@ -159,6 +159,8 @@ namespace XLua
                 }
                 else
                 {
+                    // 此处添加日志输出，可以看到在生成wrap代码后，还有哪些type在被反射生成
+                    Debug.Log("<color=green>jayden:ObjectTranslator.TryDelayWrapLoader:" + type + "</color>");
                     Utils.ReflectionWrap(L, type, privateAccessibleFlags.Contains(type));
                 }
 #else

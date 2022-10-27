@@ -34,7 +34,7 @@ function Actor:Init(id, context)
     end
 
     self.position = Vector3.zero
-    self.renderer = ActorRenderer.Create(self.id, self.context.cfgTbl.prefab)
+    self.renderer = ActorRenderer.Create(self.id, self.context.cfgTbl.prefab, self.context.cfgTbl.size)
     self.renderer:AddPointClick(function() Notifier.Dispatch("_Advanture_Click_Actor", self) end)
 
     self.fsm = require('Framework.FSMachine').Create(self)
@@ -50,9 +50,10 @@ end
 
 function Actor:Dispose()
     self.id = nil
-    self.cfg = nil
+    self.context = nil
     self.skills = nil
     self.buffs = nil
+    self.spState = nil
     self.renderer:Dispose()
     self.renderer = nil
     self.fsm:Dispose()
@@ -70,13 +71,21 @@ end
 function Actor:AddBuff(buff)
     table.insert(self.buffs, buff)
     buff.restRound = buff.round
+    self.renderer:AddBuffIcon(buff.icon)
 end
 function Actor:RemoveBuff(buff)
     for i=#self.buffs,1,-1 do
         if buff == self.buffs[i] then
             table.remove(self.buffs, i)
+            self.renderer:RemoveBuffIcon(buff.icon)
             break
         end
+    end
+end
+-- 清除所有身上的buff
+function Actor:ClearAllBuffs()
+    for i=#self.buffs,1,-1 do
+        self.buffs[i]:Remove()
     end
 end
 -- 回合结束时刷新buff持续时间

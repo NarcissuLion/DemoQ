@@ -30,6 +30,7 @@ function BattleUI:Init()
     self.rootGO:SetActive(false)
 
     Notifier.AddListener("_Battle_Start", self.Show, self)
+    Notifier.AddListener("_Battle_End", self.Hide, self)
     Notifier.AddListener("_Battle_New_Round", self.AnimRound, self)
     Notifier.AddListener("_Battle_Actor_Input", self.ShowActorSkills, self)
     Notifier.AddListener("_Battle_Skill_Selected", self.ShowChosenSkillAffects, self)
@@ -38,6 +39,7 @@ end
 
 function BattleUI:Dispose()
     Notifier.RemoveListener("_Battle_Start", self.Show, self)
+    Notifier.RemoveListener("_Battle_End", self.Hide, self)
     Notifier.RemoveListener("_Battle_New_Round", self.AnimRound, self)
     Notifier.RemoveListener("_Battle_Actor_Input", self.ShowActorSkills, self)
     Notifier.RemoveListener("_Battle_Skill_Selected", self.ShowChosenSkillAffects, self)
@@ -55,6 +57,10 @@ function BattleUI:Show()
     self.rootGO:SetActive(true)
     self.txt_round.gameObject:SetActive(false)
     self.obj_bottom:SetActive(false)
+end
+
+function BattleUI:Hide()
+    self.rootGO:SetActive(false)
 end
 
 -- 播放回合变更动画

@@ -12,7 +12,7 @@ namespace Framework.LuaMVC.Editor
 {
     public class LuaViewScriptGenerator
     {
-        private static string LUA_VIEW_DIR = GlobalDefine.LUA_ROOT_DIR + "MVC/View/";
+        private static string LUA_VIEW_DIR = LuaGlobalDefine.LUA_ROOT_DIR + "MVC/View/";
 
         public static void Generate(LuaViewFacade facade)
         {

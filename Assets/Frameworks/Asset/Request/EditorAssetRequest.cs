@@ -20,10 +20,12 @@ namespace Framework.Asset
 
         public override void Unload()
         {
+#if UNITY_EDITOR
             if (!(asset is GameObject) && !(asset is Component) && !(asset is Texture) && !(asset is Sprite))
             {
                 Resources.UnloadAsset(asset);
             }
+#endif
         }
 
         private void _Internal_StartLoad()

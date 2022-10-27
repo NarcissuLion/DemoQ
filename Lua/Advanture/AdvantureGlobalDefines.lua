@@ -213,6 +213,16 @@ function DrawBezierCurve(resName, startPosition, endPosition)
     bezierRenderer:DrawQuadraticCurve(20, startPosition, ctrlPosition, endPosition)
     return gameObject
 end
+function DrawTargetMark(target, skill)
+    local position = target:GetPosition() + Vector3(0, -0.5, 0)
+    local gameObject = GameObject.Instantiate(Resources.Load("UI/targetmark"), position, Quaternion.identity, WORLD_CANVAS)
+    gameObject.transform:Find('img_mark').gameObject:GetComponent("Image").color = skill.cfgTbl.campFilter == 2 and Color.red or Color.green
+    gameObject.transform:Find('img_chain').gameObject:SetActive(skill.cfgTbl.isAOE)
+    local sizeDelta = gameObject.transform.sizeDelta
+    sizeDelta.x = sizeDelta.x * target.context.cfgTbl.size
+    gameObject.transform.sizeDelta = sizeDelta
+    return gameObject
+end
 -----------------------------------------------------------
 
 --## 其他通用方法 ------------------------------------------

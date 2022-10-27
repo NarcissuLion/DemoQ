@@ -16,7 +16,7 @@ namespace Framework.Lua
             //init env
             _env = new LuaEnv();
             _env.AddBuildin("pb", XLua.LuaDLL.Lua.LoadPB);
-            SetLoader(new LuaLoader(), GlobalDefine.LUA_ROOT_DIR);
+            SetLoader(new LuaLoader(), LuaGlobalDefine.LUA_ROOT_DIR);
         }
 
         public override void Dispose()
@@ -45,9 +45,9 @@ namespace Framework.Lua
             _env.DoString("require '" + mainLua + "'");
         }
 
-        public byte[] LoadPB()
+        public byte[] LoadPB(string path)
         {
-            return System.IO.File.ReadAllBytes(GlobalDefine.PB_DESC_FILE);
+            return System.IO.File.ReadAllBytes(path);
         }
     }
 }

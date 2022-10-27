@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.Networking;
 using System.IO;
 
 namespace Framework.Lua
@@ -12,20 +12,39 @@ namespace Framework.Lua
         public void AddLoadPath(string path)
         {
             if (_loadPaths.Contains(path)) return;
-            if (!Directory.Exists(path)) return;
             _loadPaths.Add(path);
         }
 
         public byte[] Load(ref string filepath)
         {
-            string finalPath = null;
             foreach (string loadPath in _loadPaths)
             {
                 string realpath = loadPath + filepath.Replace(".", "/") + ".lua";
-                if (File.Exists(realpath)) { finalPath = realpath; break; }
+                byte[] bytes = TryLoad(realpath);
+                if (bytes != null) return bytes;
             }
-            if (string.IsNullOrEmpty(finalPath)) throw new System.Exception("Can't find lua script: " + filepath);
-            else return File.ReadAllBytes(finalPath);
+            throw new System.Exception("Can't find lua script: " + filepath);
+        }
+
+        private byte[] TryLoad(string filePath)
+        {
+            byte[] bytes = null;
+            bool jar = filePath.StartsWith("jar:");
+            if (jar)
+            {
+                using (UnityWebRequest request = UnityWebRequest.Get(filePath))
+                {
+                    UnityWebRequestAsyncOperation asyncOp = request.SendWebRequest();
+                    while (!asyncOp.isDone) {}
+                    if (string.IsNullOrEmpty(request.error)) bytes = request.downloadHandler.data;
+                }
+            }
+            else
+            {
+                if (File.Exists(filePath)) bytes = File.ReadAllBytes(filePath);
+            }
+            // UnityEngine.Debug.Log("TRY LOAD LUA: " + filePath + " -> " + (bytes == null ? "NULL" : bytes.Length));
+            return bytes;
         }
     }
 }
